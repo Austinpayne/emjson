@@ -2,4 +2,8 @@ language: c
 compiler:
     - clang
     - gcc
+before_install:
+    - pip install --user urllib3[secure] cpp-coveralls
 script: make test
+after_success:
+    - coveralls --exclude unity --exclude json_unit_tests.c --gcov-options '\-lp'
