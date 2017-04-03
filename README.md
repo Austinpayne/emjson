@@ -1,4 +1,6 @@
 # emjson
+[![Build Status](https://travis-ci.org/Austinpayne/emjson.svg?branch=master)](https://travis-ci.org/Austinpayne/emjson)
+
 emjson (as in "embedded JSON" or "make JSON") is a small JSON encoder written in C. It is intended for use in embedded applications, specifically those without access to dynamic memory allocation.
 
 ## API
