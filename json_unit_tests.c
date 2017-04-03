@@ -106,6 +106,7 @@ void test_json_make_all(void) {
     int size = JSON_SIZE(json);
     char buffer[size];
     int n_chars = JSON_MAKE(json, buffer);
+    
     TEST_ASSERT_EQUAL_STRING(buffer, "{\"key0\":\"value0\",\"key1\":1,\"key2\":true,\"key3\":false,\"key4\":null}");
     TEST_ASSERT_EQUAL_INT_MESSAGE(size, n_chars, "JSON_SIZE != n_chars");
     TEST_ASSERT_EQUAL_INT_MESSAGE(size, strlen(buffer), "JSON_SIZE != strlen(buffer)");
