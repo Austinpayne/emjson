@@ -42,22 +42,20 @@ int make_json_object(int n, void *objects, char *buffer, int obj_type) {
     if (n <= 0 || !objects || !buffer) return 0;
     char opens = '{';
     char ends  = '}';
-    int adjust = 0;
     if (obj_type == JSON_ARR) {
         opens = '[';
         ends = ']';
-        adjust = JSON_ARR;
     }
     buffer[0] = opens;
-    buffer[1] = 0;
+    buffer[1] = '\0';
     int n_chars = 2; // +1 for \0
     int i;
     for (i=0; i < n; i++) {
         const char *key = ((json_object *) objects)[i].key;
         const char *val = ((json_object *) objects)[i].value;
         int type = ((json_object *) objects)[i].type;
-        char *str_format = "%s\"%s\":\"%s\"%c";
-        char *lit_format = "%s\"%s\":%s%c";
+        const char *str_format = "%s\"%s\":\"%s\"%c";
+        const char *lit_format = "%s\"%s\":%s%c";
         if (obj_type == JSON_ARR) {
             key = "";
             val = ((json_element *) objects)[i].value;
@@ -72,17 +70,21 @@ int make_json_object(int n, void *objects, char *buffer, int obj_type) {
             obj_overhead -= 1; // prevent double null termination
         }
         if (type == JSON_STR) { // value is quoted
-            n_chars = snprintf(buffer, n_chars + obj_overhead + JSON_STR - adjust, str_format, buffer, key, val, end) + 1; // +1 for \0
+            //strcat(buffer, key);
+            n_chars = sprintf(buffer, str_format, buffer, key, val, end);
+            //n_chars = snprintf(buffer, n_chars + obj_overhead + JSON_STR - adjust, str_format, buffer, key, val, end) + 1; // +1 for \0
             if (n_chars < 0)
                 return n_chars;
         }
         else if (type == JSON_LITERAL) { // value is not quoted
-            n_chars = snprintf(buffer, n_chars + obj_overhead + JSON_LITERAL - adjust, lit_format, buffer, key, val, end) + 1; // +1 for \0
-        if (n_chars < 0)
-            return n_chars;
+            n_chars = sprintf(buffer, lit_format, buffer, key, val, end);
+            //n_chars = snprintf(buffer, n_chars + obj_overhead + JSON_LITERAL - adjust, lit_format, buffer, key, val, end) + 1; // +1 for \0
+            if (n_chars < 0)
+                return n_chars;
         }
     }
-    n_chars = snprintf(buffer, n_chars + 1, "%s%c", buffer, ends); // +1 for } or ]
+    n_chars = sprintf(buffer, "%s%c", buffer, ends);
+//    n_chars = snprintf(buffer, n_chars + 1, "%s%c", buffer, ends); // +1 for } or ]
     return n_chars;
 }
 
