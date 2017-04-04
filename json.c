@@ -70,21 +70,17 @@ int make_json_object(int n, void *objects, char *buffer, int obj_type) {
             obj_overhead -= 1; // prevent double null termination
         }
         if (type == JSON_STR) { // value is quoted
-            //strcat(buffer, key);
             n_chars = sprintf(buffer, str_format, buffer, key, val, end);
-            //n_chars = snprintf(buffer, n_chars + obj_overhead + JSON_STR - adjust, str_format, buffer, key, val, end) + 1; // +1 for \0
             if (n_chars < 0)
                 return n_chars;
         }
         else if (type == JSON_LITERAL) { // value is not quoted
             n_chars = sprintf(buffer, lit_format, buffer, key, val, end);
-            //n_chars = snprintf(buffer, n_chars + obj_overhead + JSON_LITERAL - adjust, lit_format, buffer, key, val, end) + 1; // +1 for \0
             if (n_chars < 0)
                 return n_chars;
         }
     }
     n_chars = sprintf(buffer, "%s%c", buffer, ends);
-//    n_chars = snprintf(buffer, n_chars + 1, "%s%c", buffer, ends); // +1 for } or ]
     return n_chars;
 }
 
@@ -93,7 +89,7 @@ int make_json_object(int n, void *objects, char *buffer, int obj_type) {
 // ** be passed in. use JSON_SIZE macro whenever possible to minimize these errors
 int json_size(int n, void *objects, int obj_type) {
     if (n <= 0 || !objects) return 0;
-    int json_size = 2; // for {} or []
+    int json_size = 3; // for {} or [] and \0
     int i;
     for (i=0; i < n; i++) {
         int obj_overhead = 0;

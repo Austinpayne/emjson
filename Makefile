@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-Wall
+CFLAGS=-Wall -g
 
 json: json.c
 	$(CC) $(CFLAGS) -o json json.c

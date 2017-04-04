@@ -2,6 +2,9 @@
 #include "./unity/src/unity.h"
 #include "json.h"
 
+// buffer size includes \0 while sprintf and str_len return size without \0
+#define CHAR_SIZE(size) (size-1)
+
 // UNIT TESTS ////////////////////////////////////////////////////////////////
 
 void test_json_true(void) {
@@ -57,7 +60,7 @@ void test_json_size(void) {
         {"key3", JSON_FALSE},            // 13
         {"key4", JSON_NULL},             // 12
     };                                   //  62 + 2 - 1 = 63
-    TEST_ASSERT_EQUAL_INT(JSON_SIZE(json),  63);
+    TEST_ASSERT_EQUAL_INT(CHAR_SIZE(JSON_SIZE(json)),  63);
 }
 
 void test_json_size_no_elements(void) {
@@ -90,8 +93,8 @@ void test_json_make(void) {
     char buffer[size];
     int n_chars = JSON_MAKE(json, buffer);
     TEST_ASSERT_EQUAL_STRING(buffer, "{\"key0\":\"value0\",\"key1\":1}");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(size, n_chars, "JSON_SIZE != n_chars");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(size, strlen(buffer), "JSON_SIZE != strlen(buffer)");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), n_chars, "JSON_SIZE != n_chars");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), strlen(buffer), "JSON_SIZE != strlen(buffer)");
     TEST_ASSERT_EQUAL_INT_MESSAGE(size, sizeof(buffer), "JSON_SIZE != sizeof(buffer)");
 }
 
@@ -108,8 +111,8 @@ void test_json_make_all(void) {
     int n_chars = JSON_MAKE(json, buffer);
     
     TEST_ASSERT_EQUAL_STRING(buffer, "{\"key0\":\"value0\",\"key1\":1,\"key2\":true,\"key3\":false,\"key4\":null}");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(size, n_chars, "JSON_SIZE != n_chars");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(size, strlen(buffer), "JSON_SIZE != strlen(buffer)");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), n_chars, "JSON_SIZE != n_chars");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), strlen(buffer), "JSON_SIZE != strlen(buffer)");
     TEST_ASSERT_EQUAL_INT_MESSAGE(size, sizeof(buffer), "JSON_SIZE != sizeof(buffer)");
 }
 
@@ -129,8 +132,8 @@ void test_json_nested_object(void) {
     char buffer[size];
     int n_chars = JSON_MAKE(json, buffer);
     TEST_ASSERT_EQUAL_STRING(buffer, "{\"key0\":\"value0\",\"nest\":{\"nested_key0\":\"nested_value0\",\"nested_key1\":2}}");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(size, n_chars, "JSON_SIZE != n_chars");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(size, strlen(buffer), "JSON_SIZE != strlen(buffer)");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), n_chars, "JSON_SIZE != n_chars");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), strlen(buffer), "JSON_SIZE != strlen(buffer)");
     TEST_ASSERT_EQUAL_INT_MESSAGE(size, sizeof(buffer), "JSON_SIZE != sizeof(buffer)");
 }
 
@@ -150,8 +153,8 @@ void test_json_nested_array(void) {
     char buffer[size];
     int n_chars = JSON_MAKE(json, buffer);
     TEST_ASSERT_EQUAL_STRING(buffer, "{\"key0\":\"value0\",\"nest\":[\"nested_value0\",2]}");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(size, n_chars, "JSON_SIZE != n_chars");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(size, strlen(buffer), "JSON_SIZE != strlen(buffer)");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), n_chars, "JSON_SIZE != n_chars");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), strlen(buffer), "JSON_SIZE != strlen(buffer)");
     TEST_ASSERT_EQUAL_INT_MESSAGE(size, sizeof(buffer), "JSON_SIZE != sizeof(buffer)");
 }
 
