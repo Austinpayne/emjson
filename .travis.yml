@@ -10,6 +10,7 @@ install:
 script:
     - platformio remote test -e uno
 after_success:
+    # urllib3 should be installed after remote tests as is breaks remote requests
     - pip install urllib3[secure] cpp-coveralls
     - make test
-    - coveralls --exclude unity --exclude json_unit_tests.c --gcov-options '\-lp'
+    - coveralls --exclude unity --exclude test --exclude lib --gcov-options '\-lp'
