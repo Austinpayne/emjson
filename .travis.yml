@@ -10,5 +10,6 @@ install:
 script:
     - platformio remote test -e uno
 after_success:
+    - pip install urllib3[secure] cpp-coveralls
     - make test
     - coveralls --exclude unity --exclude json_unit_tests.c --gcov-options '\-lp'
