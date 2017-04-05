@@ -115,7 +115,7 @@ int json_size(int n, void *objects, int obj_type) {
     return json_size-1; // -1 for removal of final ,
 }
 
-#ifndef TEST
+#ifndef UNIT_TEST
 int main(void) {
     // initializing json objects in this way minimizes size errors
     json_object json[] = {

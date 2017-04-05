@@ -1,6 +1,11 @@
 #include <string.h>
-#include "./unity/src/unity.h"
+#ifdef UNIT_TEST_NATIVE
+#include "../unity/src/unity.h"
+#include "../src/json.h"
+#else
+#include <unity.h>
 #include "json.h"
+#endif
 
 // buffer size includes \0 while sprintf and str_len return size without \0
 #define CHAR_SIZE(size) (size-1)
