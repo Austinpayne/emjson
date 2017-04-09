@@ -20,7 +20,7 @@
 #define JSON_STRING(n)          n, JSON_STR
 #define JSON_OBJECT(n)          n, JSON_LITERAL
 #define JSON_ARRAY(n)           n, JSON_LITERAL
-#define INT32_MAX_STR_LEN       11
+#define INT32_MAX_STR_LEN       12
 
 typedef struct json_element json_element;
 typedef struct json_object json_object;
@@ -44,3 +44,4 @@ struct json_object {
 
 int make_json_object(int n, void *objects, char *buffer, int type);
 int json_size(int n, void *objects, int type);
+int int_to_str(int val, char* str);
