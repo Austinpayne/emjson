@@ -158,6 +158,60 @@ void test_json_nested_array(void) {
     TEST_ASSERT_EQUAL_INT_MESSAGE(size, sizeof(buffer), "JSON_SIZE != sizeof(buffer)");
 }
 
+void test_int_to_str(void) {
+    char str[INT32_MAX_STR_LEN];
+    int n_chars = int_to_str(33, str);
+    TEST_ASSERT_EQUAL_STRING(str, "33");
+    TEST_ASSERT_EQUAL_INT(n_chars, 2);
+}
+
+void test_int_to_str0(void) {
+    char zero[INT32_MAX_STR_LEN];
+    int n_chars = int_to_str(0, zero);
+    TEST_ASSERT_EQUAL_STRING(zero, "0");
+    TEST_ASSERT_EQUAL_INT(n_chars, 1);
+}
+
+void test_int_to_str_upper_limit(void) {
+    char max[INT32_MAX_STR_LEN];
+    int n_chars = int_to_str(2147483647, max);
+    TEST_ASSERT_EQUAL_STRING("2147483647", max);
+    TEST_ASSERT_EQUAL_INT(10, n_chars);
+}
+
+void test_int_to_str_lower_limit(void) {
+    char min[INT32_MAX_STR_LEN];
+    int n_chars = int_to_str(-2147483648, min);
+    TEST_ASSERT_EQUAL_STRING("-2147483648", min);
+    TEST_ASSERT_EQUAL_INT(11, n_chars);
+}
+
+void test_json_numbers(void) {
+    char num0[INT32_MAX_STR_LEN];
+    char num1[INT32_MAX_STR_LEN];
+    char num2[INT32_MAX_STR_LEN];
+    char num3[INT32_MAX_STR_LEN];
+    int_to_str(1024, num0);
+    int_to_str(-58, num1);
+    int_to_str(2147483647, num2);
+    int_to_str(-2147483648, num3);
+
+    json_object json[] = {
+        {"num0", JSON_NUMBER(num0)},
+        {"num1", JSON_NUMBER(num1)},
+        {"num2", JSON_NUMBER(num2)},
+        {"num3", JSON_NUMBER(num3)},
+    };
+    int size = JSON_SIZE(json);
+    char buffer[size];
+    int n_chars = JSON_MAKE(json, buffer);
+
+    TEST_ASSERT_EQUAL_STRING(buffer, "{\"num0\":1024,\"num1\":-58,\"num2\":2147483647,\"num3\":-2147483648}");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), n_chars, "JSON_SIZE != n_chars");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(CHAR_SIZE(size), strlen(buffer), "JSON_SIZE != strlen(buffer)");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(sizeof(buffer), size, "JSON_SIZE != sizeof(buffer)");
+}
+
 int main(void) {
     UNITY_BEGIN();
     RUN_TEST(test_json_true);
@@ -175,5 +229,10 @@ int main(void) {
     RUN_TEST(test_json_make_all);
     RUN_TEST(test_json_nested_object);
     RUN_TEST(test_json_nested_array);
+    RUN_TEST(test_int_to_str);
+    RUN_TEST(test_int_to_str0);
+    RUN_TEST(test_int_to_str_upper_limit);
+    RUN_TEST(test_int_to_str_lower_limit);
+    RUN_TEST(test_json_numbers);
     return UNITY_END();
 }

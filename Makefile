@@ -17,5 +17,5 @@ unity:
 test: test_json
 
 clean:
-	rm -r json_unit_tests json unity master.zip *.gcov *.gcno *.gcda *~
+	rm -r json_unit_tests json unity master.zip *.gcov *.gcno *.gcda *.dSYM *~
 
