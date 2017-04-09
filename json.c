@@ -115,12 +115,19 @@ int json_size(int n, void *objects, int obj_type) {
     return json_size-1; // -1 for removal of final ,
 }
 
+// converts the given integer to a string
+int int_to_str(int val, char *str) {
+    int n_chars = sprintf(str, "%d", val);
+    return n_chars;
+}
+
 #ifndef TEST
 int main(void) {
     // initializing json objects in this way minimizes size errors
+    char paragraphs[INT32_MAX_STR_LEN]; int_to_str(3, paragraphs);
     json_object json[] = {
             {"opening", JSON_STRING("A long time ago in a galaxy far away...")},
-            {"paragraphs", JSON_NUMBER("3")},
+            {"paragraphs", JSON_NUMBER(paragraphs)},
     };
     char buffer[JSON_SIZE(json)];
     int n_chars = JSON_MAKE(json, buffer);
